@@ -6,7 +6,7 @@ const Home = () => {
   const [employees, setEmployees] = useState([]);
   const [minSalary, setMinSalary] = useState("");
 
-  // Fetch employees (with optional salary filter)
+ 
   const fetchEmployees = async () => {
     try {
       let url = "http://localhost:5001/api/employees";
@@ -17,7 +17,7 @@ const Home = () => {
 
       const res = await axios.get(url);
 
-      // API /salaries returns only name & salary → handle separately
+      
       if (minSalary) {
         setEmployees(res.data.data);
       } else {
@@ -30,9 +30,9 @@ const Home = () => {
 
   useEffect(() => {
     fetchEmployees();
-  }, [minSalary]); // re-fetch when minSalary changes
+  }, [minSalary]); 
 
-  // Delete employee
+ 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
@@ -46,7 +46,7 @@ const Home = () => {
     }
   };
 
-  // Update employee
+ 
   const handleUpdate = (id) => {
     window.location.href = `/edit/${id}`;
   };
@@ -55,7 +55,7 @@ const Home = () => {
     <div className="container mt-4">
       <h2 className="mb-3 text-center">Employee List</h2>
 
-      {/* Salary filter */}
+     
       <div className="mb-3 text-center">
         <input
           type="number"
