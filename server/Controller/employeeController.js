@@ -104,3 +104,32 @@ exports.deleteEmployee = async (req, res) => {
     });
   }
 };
+
+
+
+exports.getSalaries = async (req, res) => {
+  try {
+   
+    const minSalary = parseFloat(req.query.minSalary);
+
+    let filter = {};
+    if (!isNaN(minSalary)) {
+      filter.salary = { $gt: minSalary }; 
+    }
+
+    
+    const employees = await Employee.find(filter).select("name salary -_id");
+
+    res.status(200).json({
+      success: true,
+      count: employees.length,
+      data: employees,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+

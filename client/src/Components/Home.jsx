@@ -4,12 +4,25 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Home = () => {
   const [employees, setEmployees] = useState([]);
+  const [minSalary, setMinSalary] = useState("");
 
-  // Fetch employees
+  // Fetch employees (with optional salary filter)
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get("http://localhost:5001/api/employees");
-      setEmployees(res.data.data);
+      let url = "http://localhost:5001/api/employees";
+
+      if (minSalary) {
+        url = `http://localhost:5001/api/employees/salaries?minSalary=${minSalary}`;
+      }
+
+      const res = await axios.get(url);
+
+      // API /salaries returns only name & salary → handle separately
+      if (minSalary) {
+        setEmployees(res.data.data);
+      } else {
+        setEmployees(res.data.data);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -17,7 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, [minSalary]); // re-fetch when minSalary changes
 
   // Delete employee
   const handleDelete = async (id) => {
@@ -25,7 +38,7 @@ const Home = () => {
       try {
         await axios.delete(`http://localhost:5001/api/employees/${id}`);
         alert("Employee deleted successfully");
-        fetchEmployees(); 
+        fetchEmployees();
       } catch (error) {
         console.error(error);
         alert("Error deleting employee");
@@ -33,7 +46,7 @@ const Home = () => {
     }
   };
 
-  
+  // Update employee
   const handleUpdate = (id) => {
     window.location.href = `/edit/${id}`;
   };
@@ -41,45 +54,59 @@ const Home = () => {
   return (
     <div className="container mt-4">
       <h2 className="mb-3 text-center">Employee List</h2>
+
+      {/* Salary filter */}
+      <div className="mb-3 text-center">
+        <input
+          type="number"
+          className="form-control w-50 mx-auto"
+          placeholder="Enter minimum salary to filter"
+          value={minSalary}
+          onChange={(e) => setMinSalary(e.target.value)}
+        />
+      </div>
+
       <table className="table table-bordered table-striped shadow-sm">
         <thead className="table-dark">
           <tr>
             <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Designation</th>
+            {!minSalary && <th>Email</th>}
+            {!minSalary && <th>Phone</th>}
+            {!minSalary && <th>Designation</th>}
             <th>Salary</th>
-            <th style={{ width: "120px" }}>Actions</th>
+            {!minSalary && <th style={{ width: "120px" }}>Actions</th>}
           </tr>
         </thead>
         <tbody>
           {employees.length > 0 ? (
-            employees.map((emp) => (
-              <tr key={emp._id}>
+            employees.map((emp, index) => (
+              <tr key={emp._id || index}>
                 <td>{emp.name}</td>
-                <td>{emp.email}</td>
-                <td>{emp.phone}</td>
-                <td>{emp.designation}</td>
+                {!minSalary && <td>{emp.email}</td>}
+                {!minSalary && <td>{emp.phone}</td>}
+                {!minSalary && <td>{emp.designation}</td>}
                 <td>{emp.salary}</td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-primary me-2"
-                    onClick={() => handleUpdate(emp._id)}
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => handleDelete(emp._id)}
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
+                {!minSalary && (
+                  <td>
+                    <button
+                      className="btn btn-sm btn-primary me-2"
+                      onClick={() => handleUpdate(emp._id)}
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(emp._id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center">
+              <td colSpan={minSalary ? "2" : "6"} className="text-center">
                 No employees found
               </td>
             </tr>
