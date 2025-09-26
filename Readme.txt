@@ -11,7 +11,7 @@ Postman URLs and the corresponding JSON data you can use to test the APIs.
     "email": "renjishavj@gmail.com",
     "phone": "9895604739",
     "designation": "MERN Stack Trainer",
-    "salary:25000
+    "salary":25000
 
 2. Get All Employees (GET)
     Method: GET

@@ -9,10 +9,10 @@ const Home = () => {
  
   const fetchEmployees = async () => {
     try {
-      let url = "http://localhost:5001/api/employees";
+      let url = "https://employeemanagement-mern-backend.onrender.com/api/employees";
 
       if (minSalary) {
-        url = `http://localhost:5001/api/employees/salaries?minSalary=${minSalary}`;
+        url = `https://employeemanagement-mern-backend.onrender.com/api/employees/salaries?minSalary=${minSalary}`;
       }
 
       const res = await axios.get(url);
@@ -36,7 +36,7 @@ const Home = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        await axios.delete(`http://localhost:5001/api/employees/${id}`);
+        await axios.delete(`https://employeemanagement-mern-backend.onrender.com/api/employees/${id}`);
         alert("Employee deleted successfully");
         fetchEmployees();
       } catch (error) {

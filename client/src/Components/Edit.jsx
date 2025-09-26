@@ -21,7 +21,7 @@ function Edit() {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const res = await axios.get(`http://localhost:5001/api/employees/${id}`);
+        const res = await axios.get(`https://employeemanagement-mern-backend.onrender.com/api/employees/${id}`);
         setFormData({
           name: res.data.data.name,
           email: res.data.data.email,
@@ -48,7 +48,7 @@ function Edit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5001/api/employees/${id}`, formData);
+      await axios.put(`https://employeemanagement-mern-backend.onrender.com/api/employees/${id}`, formData);
       alert("Employee updated successfully!");
       navigate("/home"); 
     } catch (error) {

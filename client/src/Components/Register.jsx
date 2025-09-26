@@ -17,7 +17,7 @@ function Register() {
 
   const navigate = useNavigate();
 
-  // Validate form fields
+  
   const validate = () => {
     const newErrors = {};
 
@@ -65,10 +65,10 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // Stop if validation fails
+    if (!validate()) return; 
 
     try {
-      await axios.post("http://localhost:5001/api/employees", formData);
+      await axios.post("https://employeemanagement-mern-backend.onrender.com/api/employees", formData);
       setMessage("Employee registered successfully!");
       setIsSuccess(true);
 
